@@ -20,6 +20,8 @@ def bmi_calculator(request):
     return render(request, 'bmi_calculator.html')
 def blog(request):
     return render(request, 'blog.html')
+def doryang(request):
+    return render(request, 'doryang.html')
 
 def game(request):
     return render(request, 'game.html')
