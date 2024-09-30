@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+기억력 테스트 게임
+{% endblock %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/memorytest.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>기억력 테스트 게임</h1>
+    <p id="instruction">이 단어들을 순서대로 기억하세요</p>
+    <div id="time"></div> <!-- 타이머 위치 -->
+    <div id="words-display">
+        <ul class="words-list">
+            {% for word in words %}
+                <li>
+                    <input type="text" class="input-word" value="{{ word }}" disabled>
+                    <input type="text" class="input-word" disabled>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form id="memory-test-form" action="{% url 'check' %}" method="post" style="display:none; position: relative;">
+        {% csrf_token %}
+        {% for word in words %}
+            <input type="hidden" name="correct_words" value="{{ word }}">
+        {% endfor %}
+        <ul class="words-list" id="input-list">
+            {% for word in words %}
+                <li>
+                    <input type="text" class="input-word hidden-word" value="{{ word }}" disabled>
+                    <input type="text" name="words" class="input-word" autocomplete="off">
+                </li>
+            {% endfor %}
+        </ul>
+        <br>
+        <button type="submit" class="btn-submit">제출</button>
+        <div class="instructions">
+            아래 칸으로 이동 : Tab 버튼<br>
+            위 칸으로 이동 : Shift버튼 누르고 있는 상태에서 Tab 버튼<br>
+            제출 : Enter
+        </div>
+    </form>
+    <div class="controls">
+        <a id="hidden-game-link" href="{% url 'game' %}" style="display:none;"></a> 
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/memorytest.js' %}"></script>
+
+<!-- JavaScript에서 사용할 Django 템플릿 변수를 스크립트 내에서 처리 -->
+<script>
+    var wordsCount = {{ words|length }};
+</script>
+{% endblock %}

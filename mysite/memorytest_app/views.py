@@ -22,7 +22,7 @@ def index(request):
     context = {
         'words': words
     }
-    return render(request, 'index.html', context)
+    return render(request, 'memorytest_index.html', context)
 
 def check(request):
     if request.method == 'POST':
@@ -46,5 +46,5 @@ def check(request):
             'word_pairs': word_pairs,
             'total': total
         }
-        return render(request, 'result.html', context)
+        return render(request, 'memorytest_result.html', context)
     return HttpResponse("Invalid request")
