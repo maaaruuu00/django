@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+    console.log("wordsCount: ", wordsCount);  // 확인 로그 추가
     function startTimer(duration) {
         var timer = duration, seconds;
         var display = document.getElementById('time');
@@ -34,11 +36,14 @@ document.addEventListener("DOMContentLoaded", function() {
     var totalTime = wordsCount * timePerWord;
     startTimer(totalTime);
 
+    // 현재 페이지 히스토리 교체하여 뒤로 가기 시 memorytest_index.html을 건너뜀
+    window.history.replaceState(null, null, window.location.href);
+
     // 브라우저의 뒤로가기 버튼 클릭 시 game.html로 리다이렉트
     window.onpopstate = function(event) {
+        console.log("뒤로 가기 이벤트 발생");
         document.getElementById('hidden-game-link').click();  // hidden-game-link 클릭하여 game.html로 이동
     };
-
 
     // 모바일 키보드 닫기
     document.addEventListener('input', function (event) {

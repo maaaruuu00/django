@@ -24,6 +24,10 @@
     {% if not "정답입니다!" in message %}
         <a href="{% url 'index' %}" class="btn-retry">다시 하기</a>
     {% endif %}
+
+    <div class="controls">
+        <a id="hidden-game-link" href="{% url 'game' %}" style="display:none;"></a> 
+    </div>
 </div>
 {% endblock %}
 
