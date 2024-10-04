@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    // HTML의 data-* 속성에서 wordsCount 값을 가져옵니다.
+    var wordsCount = parseInt(document.getElementById('memory-test-data').dataset.wordsCount);
     console.log("wordsCount: ", wordsCount);  // 확인 로그 추가
     function startTimer(duration) {
         var timer = duration, seconds;
@@ -38,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 현재 페이지 히스토리 교체하여 뒤로 가기 시 memorytest_index.html을 건너뜀
     window.history.replaceState(null, null, window.location.href);
+    console.log("현재 히스토리 스택에서의 위치: ", window.location.href);
 
     // 브라우저의 뒤로가기 버튼 클릭 시 game.html로 리다이렉트
     window.onpopstate = function(event) {

@@ -13,6 +13,8 @@
 <div class="container">
     <h1>기억력 테스트 게임</h1>
     <p>{{ message }}</p>
+    <!-- wordsCount 값을 가져올 div 추가 -->
+    <div id="memory-test-data" data-words-count="{{ words|length }}"></div>
     <ul class="words-list">
         {% for correct_word, given_word in word_pairs %}
             <li>
