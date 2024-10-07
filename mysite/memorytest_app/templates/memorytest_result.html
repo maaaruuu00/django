@@ -13,8 +13,10 @@
 <div class="container">
     <h1>기억력 테스트 게임</h1>
     <p>{{ message }}</p>
+    
     <!-- wordsCount 값을 가져올 div 추가 -->
-    <div id="memory-test-data" data-words-count="{{ words|length }}"></div>
+    <div id="memory-test-data" data-words-count="{{ word_pairs|length }}"></div>
+    
     <ul class="words-list">
         {% for correct_word, given_word in word_pairs %}
             <li>
@@ -23,6 +25,8 @@
             </li>
         {% endfor %}
     </ul>
+
+    <!-- 결과가 "정답입니다!"가 아닐 경우에만 다시 하기 버튼 표시 -->
     {% if not "정답입니다!" in message %}
         <a href="{% url 'index' %}" class="btn-retry">다시 하기</a>
     {% endif %}
@@ -35,4 +39,19 @@
 
 {% block javascript %}
 <script src="{% static 'js/memorytest.js' %}"></script>
+
+<!-- 결과 페이지에서 뒤로 가기 버튼을 처리할 코드 -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    if (document.getElementById('result-page')) {
+        // 현재 페이지 히스토리 교체하여 뒤로 가기 시 memorytest_index.html을 건너뜀
+        window.history.replaceState(null, null, window.location.href);
+
+        // 브라우저의 뒤로가기 버튼 클릭 시 game.html로 리다이렉트
+        window.onpopstate = function(event) {
+            document.getElementById('hidden-game-link').click();  // hidden-game-link 클릭하여 game.html로 이동
+        };
+    }
+});
+</script>
 {% endblock %}

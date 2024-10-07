@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import random
 import os
@@ -48,3 +48,16 @@ def check(request):
         }
         return render(request, 'memorytest_result.html', context)
     return HttpResponse("Invalid request")
+
+def result(request):
+    # 결과 데이터 가져오기
+    message = request.session.get('message', '결과 없음')
+    word_pairs = request.session.get('word_pairs', [])
+
+    context = {
+        'message': message,
+        'word_pairs': word_pairs,
+        'total': len(word_pairs)
+    }
+
+    return render(request, 'memorytest_result.html', context)
