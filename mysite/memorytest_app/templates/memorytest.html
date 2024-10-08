@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}
+기억력 테스트 게임
+{% endblock %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/memorytest.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" id="game-container">
+    <!-- 게임 화면 -->
+    <div id="game-screen">
+        <h1>기억력 테스트 게임</h1>
+        <p id="instruction">이 단어들을 순서대로 기억하세요</p>
+        <div id="memory-test-data" data-words-count="{{ words|length }}"></div>
+        <div id="time"></div>  <!-- 타이머 위치 -->
+        <div id="words-display">
+            <ul class="words-list">
+                {% for word in words %}
+                    <li>
+                        <input type="text" class="input-word" value="{{ word }}" disabled>
+                        <input type="text" class="input-word" disabled>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <form id="memory-test-form" action="{% url 'check' %}" method="post" style="display:none;">
+            {% csrf_token %}
+            {% for word in words %}
+                <input type="hidden" name="correct_words" value="{{ word }}">
+            {% endfor %}
+            <ul class="words-list" id="input-list">
+                {% for word in words %}
+                    <li>
+                        <input type="text" class="input-word hidden-word" value="{{ word }}" disabled>
+                        <input type="text" name="words" class="input-word" autocomplete="off">
+                    </li>
+                {% endfor %}
+            </ul>
+            <br>
+            <button type="submit" class="btn-submit">제출</button>
+            <div class="instructions">
+                아래 칸으로 이동 : Tab 버튼<br>
+                위 칸으로 이동 : Shift버튼 누르고 있는 상태에서 Tab 버튼<br>
+                제출 : Enter
+            </div>
+        </form>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="result-screen" style="display: none;">
+        <h1>기억력 테스트 결과</h1>
+        <p id="result-message">{{ message }}</p>
+        <ul class="words-list">
+            {% for correct_word, given_word in word_pairs %}
+                <li>
+                    <input type="text" class="input-word" value="{{ correct_word }}" disabled>
+                    <input type="text" class="input-word {% if correct_word == given_word %}correct{% else %}incorrect{% endif %}" value="{{ given_word }}" disabled>
+                </li>
+            {% endfor %}
+        </ul>
+        <!-- 결과가 "정답입니다!"가 아닐 경우에만 다시 하기 버튼 표시 -->
+        {% if not "정답입니다!" in message %}
+            a href="{% url 'index' %}" class="btn-retry">다시 하기</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/memorytest.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 화면 요소들
+        var gameScreen = document.getElementById('game-screen');
+        var resultScreen = document.getElementById('result-screen');
+        
+        // 게임 로직 및 타이머 관련 코드
+        function startGame() {
+            var memoryTestData = document.getElementById('memory-test-data');
+            var wordsCount = parseInt(memoryTestData.dataset.wordsCount);
+
+            var timePerWord = 3;
+            var totalTime = wordsCount * timePerWord;
+            startTimer(totalTime);
+
+            function startTimer(duration) {
+                var timer = duration, seconds;
+                var display = document.getElementById('time');
+                var interval = setInterval(function () {
+                    seconds = parseInt(timer % 60, 10);
+                    if (--timer < 0) {
+                        clearInterval(interval);
+                        // 타이머 종료 후 입력 폼 활성화
+                        document.getElementById('memory-test-form').style.display = 'block';
+                        display.textContent = '';
+                    } else {
+                        display.textContent = seconds + "초 남음";
+                    }
+                }, 1000);
+            }
+        }
+
+        // 결과 화면 표시
+        function showResult() {
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+        }
+
+        // 타이머와 게임 시작 호출
+        startGame();
+
+        // 결과 화면 전환 (예: 타이머가 끝나거나 제출 후)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault(); // 예시용: 실제로는 서버로 제출됨
+            showResult();
+        });
+    });
+</script>
+{% endblock %}

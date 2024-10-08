@@ -15,12 +15,11 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    position: relative;
     max-width: 90%;
 }
 
 .words-list {
-    font-size: 1.5em; /* 글자 크기를 1.5배로 */
+    font-size: 1.5em;
     list-style-type: none;
     padding: 0;
 }
@@ -28,12 +27,12 @@ body {
 .words-list li {
     margin: 10px 0;
     display: flex;
-    justify-content: center; /* 중앙 정렬 */
+    justify-content: center;
     align-items: center;
 }
 
 .input-word {
-    font-size: 1em; /* 입력 폼의 글자 크기 */
+    font-size: 1em;
     padding: 5px;
     width: 100%;
     max-width: 200px;
@@ -42,19 +41,16 @@ body {
 }
 
 .hidden-word {
-    color: transparent; /* 글자를 투명하게 설정 */
+    color: transparent;
 }
 
 #time {
     font-size: 1.5em;
     color: red;
-    margin-top: 10px; /* instruction 아래에 배치되도록 여백 추가 */
-    position: relative;
-    top: 0;
-    right: 0;
+    margin-top: 10px;
 }
 
-.btn-submit {
+.btn-submit, .btn-retry {
     font-size: 1.2em;
     padding: 10px 20px;
     background-color: #007bff;
@@ -62,9 +58,34 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 20px;
 }
 
-.btn-submit:hover,
+.btn-submit:hover, .btn-retry:hover {
+    background-color: #0056b3;
+}
+
+.correct {
+    border-color: blue;
+}
+
+.incorrect {
+    border-color: red;
+}
+
+.instructions {
+    text-align: left;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+#input-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .btn-submit:active {
     background-color: #0056b3;
 }
@@ -77,28 +98,6 @@ body {
     position: relative;
 }
 
-#input-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 중앙 정렬 */
-}
-
-.instructions {
-    text-align: left;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #555;
-    max-width: 100%;
-}
-
-.correct {
-    border-color: blue; /* 맞춘 단어의 테두리 색상 */
-}
-
-.incorrect {
-    border-color: red; /* 틀린 단어의 테두리 색상 */
-}
-
 .btn-retry {
     font-size: 1.2em;
     padding: 10px 20px;
@@ -109,6 +108,7 @@ body {
     cursor: pointer;
     margin-top: 20px;
 }
+
 
 .btn-retry:hover,
 .btn-retry:active {

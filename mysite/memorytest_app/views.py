@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.urls import reverse
 import random
 import os
 
@@ -15,14 +16,15 @@ words_list = load_words(WORDS_FILE_PATH)
 
 def index(request):
     if 'level' not in request.session:
-        request.session['level'] = 3  # 처음에는 3개의 단어를 표시
+        request.session['level'] = 3  # 기본 단어 개수 3개
 
     level = request.session['level']
     words = random.sample(words_list, level)
     context = {
-        'words': words
+        'words': words,
+        'is_game': True  # 게임 진행 상태 플래그
     }
-    return render(request, 'memorytest_index.html', context)
+    return render(request, 'memorytest.html', context)
 
 def check(request):
     if request.method == 'POST':
@@ -32,32 +34,22 @@ def check(request):
         total = len(correct_words)
 
         if correct_count == total:
-            request.session['level'] += 1  # 맞춘 경우 단어 개수 1개 증가
+            request.session['level'] += 1  # 맞춘 경우 단어 개수 증가
             message = f"정답입니다! {total}개의 단어를 모두 맞췄습니다."
         else:
-            request.session['level'] = 3  # 틀린 경우 다시 3개로 초기화
+            request.session['level'] = 3  # 틀린 경우 단어 개수 초기화
             message = f"틀렸습니다. {total}개의 단어 중 {correct_count}개를 맞췄습니다."
 
-        # 인덱스를 포함한 튜플 리스트 생성
+        # 결과 데이터 전달
         word_pairs = [(correct_word, given_word) for correct_word, given_word in zip(correct_words, given_words)]
 
         context = {
             'message': message,
             'word_pairs': word_pairs,
-            'total': total
+            'total': total,
+            'is_game': False  # 결과 상태 플래그
         }
-        return render(request, 'memorytest_result.html', context)
+
+        return render(request, 'memorytest.html', context)
+
     return HttpResponse("Invalid request")
-
-def result(request):
-    # 결과 데이터 가져오기
-    message = request.session.get('message', '결과 없음')
-    word_pairs = request.session.get('word_pairs', [])
-
-    context = {
-        'message': message,
-        'word_pairs': word_pairs,
-        'total': len(word_pairs)
-    }
-
-    return render(request, 'memorytest_result.html', context)
