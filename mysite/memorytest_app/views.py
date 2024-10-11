@@ -34,13 +34,13 @@ def check(request):
         total = len(correct_words)
 
         if correct_count == total:
-            request.session['level'] += 1  # 맞춘 경우 단어 개수 증가
+            request.session['level'] = request.session.get('level', 3) + 1  # 맞춘 경우 단어 개수 1개 증가
             message = f"정답입니다! {total}개의 단어를 모두 맞췄습니다."
         else:
-            request.session['level'] = 3  # 틀린 경우 단어 개수 초기화
+            request.session['level'] = 3  # 틀린 경우 다시 3개로 초기화
             message = f"틀렸습니다. {total}개의 단어 중 {correct_count}개를 맞췄습니다."
 
-        # 결과 데이터 전달
+        # 인덱스를 포함한 튜플 리스트 생성
         word_pairs = [(correct_word, given_word) for correct_word, given_word in zip(correct_words, given_words)]
 
         context = {
@@ -53,3 +53,4 @@ def check(request):
         return render(request, 'memorytest.html', context)
 
     return HttpResponse("Invalid request")
+

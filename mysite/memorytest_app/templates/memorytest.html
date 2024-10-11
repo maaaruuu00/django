@@ -51,6 +51,8 @@
     </div>
 
     <!-- 결과 화면 -->
+    <div id="game-data" data-is-game="{{ is_game }}"></div>
+
     <div id="result-screen" style="display: none;">
         <h1>기억력 테스트 결과</h1>
         <p id="result-message">{{ message }}</p>
@@ -64,7 +66,7 @@
         </ul>
         <!-- 결과가 "정답입니다!"가 아닐 경우에만 다시 하기 버튼 표시 -->
         {% if not "정답입니다!" in message %}
-            a href="{% url 'index' %}" class="btn-retry">다시 하기</a>
+            <a href="{% url 'index' %}" class="btn-retry">다시 하기</a>
         {% endif %}
     </div>
 </div>
@@ -72,52 +74,4 @@
 
 {% block javascript %}
 <script src="{% static 'js/memorytest.js' %}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // 화면 요소들
-        var gameScreen = document.getElementById('game-screen');
-        var resultScreen = document.getElementById('result-screen');
-        
-        // 게임 로직 및 타이머 관련 코드
-        function startGame() {
-            var memoryTestData = document.getElementById('memory-test-data');
-            var wordsCount = parseInt(memoryTestData.dataset.wordsCount);
-
-            var timePerWord = 3;
-            var totalTime = wordsCount * timePerWord;
-            startTimer(totalTime);
-
-            function startTimer(duration) {
-                var timer = duration, seconds;
-                var display = document.getElementById('time');
-                var interval = setInterval(function () {
-                    seconds = parseInt(timer % 60, 10);
-                    if (--timer < 0) {
-                        clearInterval(interval);
-                        // 타이머 종료 후 입력 폼 활성화
-                        document.getElementById('memory-test-form').style.display = 'block';
-                        display.textContent = '';
-                    } else {
-                        display.textContent = seconds + "초 남음";
-                    }
-                }, 1000);
-            }
-        }
-
-        // 결과 화면 표시
-        function showResult() {
-            gameScreen.style.display = 'none';
-            resultScreen.style.display = 'block';
-        }
-
-        // 타이머와 게임 시작 호출
-        startGame();
-
-        // 결과 화면 전환 (예: 타이머가 끝나거나 제출 후)
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault(); // 예시용: 실제로는 서버로 제출됨
-            showResult();
-        });
-    });
-</script>
 {% endblock %}
