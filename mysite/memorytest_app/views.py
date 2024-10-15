@@ -36,6 +36,7 @@ def check(request):
         if correct_count == total:
             request.session['level'] = request.session.get('level', 3) + 1  # 맞춘 경우 단어 개수 1개 증가
             message = f"정답입니다! {total}개의 단어를 모두 맞췄습니다."
+            return redirect('index')  # 게임이 다시 시작되도록 index로 리디렉션
         else:
             request.session['level'] = 3  # 틀린 경우 다시 3개로 초기화
             message = f"틀렸습니다. {total}개의 단어 중 {correct_count}개를 맞췄습니다."
