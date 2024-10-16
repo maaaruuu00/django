@@ -98,7 +98,7 @@ body {
     position: relative;
 }
 
-.btn-retry {
+.btn-retry, .btn-exit {
     font-size: 1.2em;
     padding: 10px 20px;
     background-color: #28a745;
@@ -110,7 +110,15 @@ body {
 }
 
 
-.btn-retry:hover,
-.btn-retry:active {
+.btn-retry:hover, .btn-retry:active,
+.btn-exit:hover, .btn-exit:active {
     background-color: #218838;
+}
+
+
+/* 버튼을 가로로 나란히 배치 */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;  /* 버튼 사이 간격 */
 }
