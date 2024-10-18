@@ -55,6 +55,7 @@
 
     <div id="result-screen" style="display: none;">
         <h1>기억력 테스트 결과</h1>
+        <p id="score-display">게임 점수: 0점    |    최고 점수: 0점</p>  <!-- 여기에 점수 표시 -->
         <p id="result-message">{{ message }}</p>
         <ul class="words-list">
             {% for correct_word, given_word in word_pairs %}
